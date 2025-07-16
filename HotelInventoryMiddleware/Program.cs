@@ -1,3 +1,7 @@
+using HotelInventoryMiddleware.Adapters;
+using HotelInventoryMiddleware.Data;
+using HotelInventoryMiddleware.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace HotelInventoryMiddleware
 {
@@ -13,6 +17,13 @@ namespace HotelInventoryMiddleware
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddDbContext<Data.HotelContext>(options =>
+                options.UseInMemoryDatabase("hotelDb"));
+
+            builder.Services.AddScoped<Adapters.ITspAdapter, Adapters.DummyTspAdapter>();
+            builder.Services.AddScoped<Services.ITspService, Services.TspService>();
+            builder.Services.AddScoped<Services.IHotelService, Services.HotelService>();
 
             var app = builder.Build();
 
